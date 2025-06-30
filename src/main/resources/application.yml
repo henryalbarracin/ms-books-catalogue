@@ -35,3 +35,13 @@ eureka:
   instance:
     preferIpAddress: true
     hostname: ms-books-catalogue
+
+##Elasticsearch config https://eofj8uoj7g:auimsb91ki@personal-search-4382094174.us-east-1.bonsaisearch.net:443
+elasticsearch:
+  host: ${ELASTICSEARCH_HOST:personal-search-4382094174.us-east-1.bonsaisearch.net}
+  credentials:
+    user: ${ELASTICSEARCH_USER:eofj8uoj7g}
+    password: ${ELASTICSEARCH_PWD:auimsb91ki}
+logging:
+  level:
+    tracer: TRACE

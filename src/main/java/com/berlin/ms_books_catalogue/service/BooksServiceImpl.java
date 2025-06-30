@@ -1,57 +1,43 @@
 package com.berlin.ms_books_catalogue.service;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.berlin.ms_books_catalogue.controller.model.BookDto;
+import com.berlin.ms_books_catalogue.controller.model.BooksQueryResponse;
 import com.berlin.ms_books_catalogue.controller.model.CreateBooksRequest;
-import com.berlin.ms_books_catalogue.data.BooksRepository;
+import com.berlin.ms_books_catalogue.data.DataAccessRespository;
 import com.berlin.ms_books_catalogue.data.model.Book;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RestController;
 
-
-
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 @Service
-@Slf4j
-public abstract class BooksServiceImpl implements BooksService  {
+@RequiredArgsConstructor
 
-    @Autowired
-    private BooksRepository repository;
+public class BooksServiceImpl implements BooksService {
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final DataAccessRespository respository;
 
     @Override
-    public List<Book> getBooks(String title, String author, java.util.Date publication, String category, String isbn, Integer score ,
-                               Boolean visible, Integer price, Integer stock, Boolean digital){
-
-        if (StringUtils.hasLength(title) || StringUtils.hasLength(author) || publication != null || StringUtils.hasLength(category)
-                || StringUtils.hasLength(isbn) || score != null  || visible != null || price != null || digital != null) {
-
-            return repository.search(title, author, publication, category, isbn, score , visible);
-        }
-
-        List<Book> books = repository.getBooks();
-        return books.isEmpty() ? null : books;
+    public BooksQueryResponse getBooks(String title, String author, Date publication, String category, String isbn,
+                                       Boolean visible, Double price, Integer stock, Boolean digital,
+                                       List<String>titleValues, List<String> priceValues,
+                                       List<String>categoryValues, String  page) {
+        return respository.findBooks(title, author, publication, category, isbn,  visible, price, stock, digital,
+                titleValues, priceValues,categoryValues, page);
     }
 
     @Override
     public Book getBook(String booksId) {
-        return repository.getById(Long.valueOf(booksId));
+        return respository.findById(booksId).orElse(null);
     }
 
     @Override
     public Boolean removeBook(String booksId) {
-
-        Book books = repository.getById(Long.valueOf(booksId));
-
-        if (books != null) {
-            repository.delete(books);
+        Book book = respository.findById(booksId).orElse(null);
+        if (book != null) {
+            respository.delete(book);
             return Boolean.TRUE;
         } else {
             return Boolean.FALSE;
@@ -65,50 +51,20 @@ public abstract class BooksServiceImpl implements BooksService  {
                 && request.getPublication() != null
                 && org.springframework.util.StringUtils.hasLength(request.getCategory().trim())
                 && org.springframework.util.StringUtils.hasLength(request.getIsbn().trim())
-                && request.getScore() != null
                 && request.getVisible() != null
                 && request.getPrice() != null
                 && request.getStock() != null
                 && request.getDigital() != null) {
 
             Book books = Book.builder().title(request.getTitle()).author(request.getAuthor())
-                    .publication(request.getPublication()).category(request.getCategory())
-                    .isbn(request.getIsbn()).score(request.getScore()).visible(request.getVisible())
-                    .price(request.getPrice()).stock(request.getStock()).digital(request.getDigital()).build();
-            return repository.save(books);
+                    .publication(String.valueOf(request.getPublication())).category(request.getCategory())
+                    .isbn(request.getIsbn()).visible(request.getVisible())
+                    .price(String.valueOf(request.getPrice()))
+                    .stock(String.valueOf(request.getStock())).digital(request.getDigital()).build();
+            return respository.save(books);
         } else {
             return null;
         }
+
     }
-
-    /* @Override
-   public Books updateBook(String BooksId, String request) {
-        Books books = repository.getById(Long.valueOf(BooksId));
-        if (books != null) {
-            try {
-                JsonMergePatch jsonMergePatch = JsonMergePatch.fromJson(objectMapper.readTree(request));
-                JsonNode target = jsonMergePatch.apply(objectMapper.readTree(objectMapper.writeValueAsString(books)));
-                Books patched = objectMapper.treeToValue(target, Books.class);
-                repository.save(patched);
-                return patched;
-            } catch (JsonProcessingException | JsonPatchException e) {
-                log.error("Error updating books {}", books, e);
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }*/
-    @Override
-    public Book updateBook(String booksId, BookDto updateRequest) {
-        Book books = repository.getById(Long.valueOf(booksId));
-        if (books != null) {
-            books.update(updateRequest);
-            repository.save(books);
-            return books;
-        } else
-            return null;
-        }
-    }
-
-
+}
