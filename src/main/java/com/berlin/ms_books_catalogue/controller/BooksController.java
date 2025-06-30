@@ -119,6 +119,18 @@ public class BooksController {
         }
     }
 
+    @GetMapping("/booksbytitle")
+    public List<Book> getBookByTitle(
+            @Parameter(name = "title", required = false)
+            @RequestParam(required = false) String title) {
+        log.info("Request received for search book, title: {}", title);
+        if (title != null) {
+            return service.getBookByTitle(title);
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
     @DeleteMapping("/books/{booksId}")
     public ResponseEntity<Void> deleteBook(@PathVariable String booksId) {
 
