@@ -9,6 +9,9 @@ import java.util.List;
 
 public interface BooksService {
 
+  BooksQueryResponse  getBooksMin(String title, String author, Date publication, String category, String isbn,
+                               Boolean visible, Double price, Integer stock, Boolean digital);
+
   BooksQueryResponse  getBooks(String title, String author, Date publication, String category, String isbn,
                                Boolean visible, Double price, Integer stock, Boolean digital ,
                                List<String> titleValues,List<String> priceValues,
@@ -16,8 +19,14 @@ public interface BooksService {
 
   Book getBook(String booksId);
 
+  List<Book> getBookByCategory(String category);
+
+  List<Book> getBookByTitle(String title);
+
   Boolean removeBook(String booksId);
 
   Book createBook(CreateBooksRequest request);
+
+  List<String> getBookCategories();
 
 }

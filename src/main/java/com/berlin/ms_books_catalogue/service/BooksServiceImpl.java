@@ -20,6 +20,12 @@ public class BooksServiceImpl implements BooksService {
     private final DataAccessRespository respository;
 
     @Override
+    public BooksQueryResponse getBooksMin(String title, String author, Date publication, String category, String isbn,
+                                       Boolean visible, Double price, Integer stock, Boolean digital) {
+        return respository.findBooksMin(title, author, publication, category, isbn,  visible, price, stock, digital);
+    }
+
+    @Override
     public BooksQueryResponse getBooks(String title, String author, Date publication, String category, String isbn,
                                        Boolean visible, Double price, Integer stock, Boolean digital,
                                        List<String>titleValues, List<String> priceValues,
@@ -31,6 +37,15 @@ public class BooksServiceImpl implements BooksService {
     @Override
     public Book getBook(String booksId) {
         return respository.findById(booksId).orElse(null);
+    }
+
+    @Override
+    public List<Book> getBookByCategory(String category) {
+        return respository.findByCategory(category);
+    }
+    @Override
+    public List<Book> getBookByTitle(String title){
+        return respository.findByTitle(title);
     }
 
     @Override
@@ -66,5 +81,9 @@ public class BooksServiceImpl implements BooksService {
             return null;
         }
 
+    }
+
+    public List<String> getBookCategories() {
+        return respository.getBookCategories();
     }
 }
