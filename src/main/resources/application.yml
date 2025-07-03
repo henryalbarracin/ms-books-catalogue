@@ -2,19 +2,19 @@
 spring:
   application:
     name: ms-books-catalogue
-  datasource:
+  #datasource:
     #conexion a h2
     #url: jdbc:h2:mem:testdb;Mode=MySQL
 
     #conexion a postgresql
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://host.docker.internal:5432/relatos}
-    username: ${SPRING_DATASOURCE_USERNAME:postgres}
-    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: create-drop
-    defer-datasource-initialization: true
+    #url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://host.docker.internal:5432/relatos}
+    #username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    #password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+  #jpa:
+  #  show-sql: true
+  #  hibernate:
+  #    ddl-auto: create-drop
+  #  defer-datasource-initialization: true
   #config de h2
   #h2:
   #  console:
