@@ -128,7 +128,7 @@ public class DataAccessRespository {
                     .addUnboundedFrom(Consts.RANGE_PRICE_2, 100));
         }
         //Se establece un maximo de 5 resultados, va acorde con el tamaño de la pagina
-        nativeSearchQueryBuilder.withMaxResults(5);
+        nativeSearchQueryBuilder.withMaxResults(25);
 
         // se define el  tamaño de la pagina de 5 elementos
         nativeSearchQueryBuilder.withPageable(PageRequest.of(0, 5));
@@ -215,7 +215,7 @@ public class DataAccessRespository {
                 .addUnboundedFrom(Consts.RANGE_PRICE_2, 100));
 
         //Se establece un maximo de 5 resultados, va acorde con el tamaño de la pagina
-        nativeSearchQueryBuilder.withMaxResults(5);
+        nativeSearchQueryBuilder.withMaxResults(25);
 
 
         // se define el  tamaño de la pagina de 5 elementos
